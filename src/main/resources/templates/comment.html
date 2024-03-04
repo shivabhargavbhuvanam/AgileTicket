@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Comments List</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .comment-card {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 10px;
+            background-color: #f9f9f9;
+        }
+        .comment-meta {
+            font-size: 0.85em;
+            color: #666;
+        }
+        .comment-body {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        <h1>Comments</h1>
+
+        
+        <form th:action="@{/comment/ticket/{id}/edit(id=${ticket.id})}" th:object="${commentsWrapper}" method="post">
+
+            
+            <div th:if="${#lists.isEmpty(commentsWrapper.comments)}">
+                <p>No comments available.</p>
+            </div>
+
+            
+            <div th:if="${not #lists.isEmpty(commentsWrapper.comments)}">
+                <!-- Iterate over the comments -->
+                <div th:each="comment, iterStat : *{comments}" class="comment-card">
+                    <div class="comment-meta">
+                        <span th:text="${#temporals.format(comment.modificationTime, 'dd MMMM yyyy HH:mm:ss')}">Formatted Timestamp</span> by 
+                        <span th:text="${comment.user.name}">Author</span>
+                    </div>
+                    <div class="comment-body">
+                        <label for="commenttext" class="form-label">Comment text:</label>
+                        <input type="text" th:id="'commenttext' + ${iterStat.index}" th:field="*{comments[__${iterStat.index}__].text}" class="form-control" />
+                    </div>
+                </div>
+            </div>
+
+            
+            <button type="submit" class="btn btn-primary mt-2">Save All Changes</button>
+        </form>
+    </div>
+
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.bundle.min.js"></script>
+    <a th:href="@{/manager/managerpage}">Home page</a><br><br>
+</body>
+</html>

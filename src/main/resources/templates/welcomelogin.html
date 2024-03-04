@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+</head>
+<body>
+    <section class="vh-100 bg-light">
+        <div class="container py-5">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h2 class="text-center mb-4">Login</h2>
+                            
+                            <form th:action="@{welcomelogin}" th:object="${user}" method="post">
+                                <div class="mb-3">
+                                    <label for="name" class="form-label">Username</label>
+                                    <input type="text" class="form-control" id="name" th:field="*{name}">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="password" class="form-label">Password</label>
+                                    <input type="password" class="form-control" id="password" th:field="*{password}">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Employment Type</label>
+                                    <div class="btn-group" data-toggle="buttons">
+                                        <label class="btn btn-outline-primary">
+                                            <input type="radio" name="userType" id="manager" autocomplete="off" th:value="manager" th:field="*{employmentType}" /> Manager
+                                        </label>
+                                        <label class="btn btn-outline-primary">
+                                            <input type="radio" name="userType" id="admin" autocomplete="off" th:value="admin" th:field="*{employmentType}" /> Admin
+                                        </label>
+                                        <label class="btn btn-outline-primary">
+                                            <input type="radio" name="userType" id="developer" autocomplete="off" th:value="developer" th:field="*{employmentType}" /> Developer
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary">Login</button>
+                            </form>   
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <a th:href="@{/user/logout}">Log out</a><br>
+    <a th:href="@{/admin/adminlogin}">Home page</a>
+</body>
+</html>

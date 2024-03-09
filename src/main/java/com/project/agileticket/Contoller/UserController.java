@@ -132,39 +132,49 @@ public class UserController {
 	@GetMapping("/welcomelogin")
 	public String welcomeLoginForm(Model model)
 	{
-		User user = new User();
-		model.addAttribute(user);
-		return "welcomelogin";
+		try {
+			User user = new User();
+			model.addAttribute(user);
+			return "welcomelogin";
+		}
+		catch(Exception e) {
+			return "welcomelogin";
+		}
 	}
 	
 	@PostMapping("/welcomelogin")
 	public String welcomeLogin(Model model,@Valid @ModelAttribute("user") User user, HttpServletRequest request)
 	{
-		System.out.print(user.getName()+" "+user.getPassword()+"\n");
-		User validUser = userService.validateUserByCredentials(user.getName().toLowerCase(), user.getPassword(), user.getEmploymentType().toLowerCase());
-		if(validUser==null)
-		{
-			System.out.print(validUser+"\n");
-			return "loginfailure";
+		try {
+			System.out.print(user.getName()+" "+user.getPassword()+"\n");
+			User validUser = userService.validateUserByCredentials(user.getName().toLowerCase(), user.getPassword(), user.getEmploymentType().toLowerCase());
+			if(validUser==null)
+			{
+				System.out.print(validUser+"\n");
+				return "loginfailure";
+			}
+			request.getSession().setAttribute("user", validUser);
+			if(validUser.getEmploymentType().toLowerCase().equals("admin"))
+			{
+				System.out.print("Error not reached yet");
+				return "redirect:/admin/adminlogin";
+			}
+			if(validUser.getEmploymentType().toLowerCase().equals("manager"))
+			{
+				System.out.println("\nsuccessfully saved manager details and continue with implementation\n");
+				return "redirect:/manager/managerpage";
+			}
+			if(validUser.getEmploymentType().toLowerCase().equals("developer"))
+			{
+				System.out.println("\nsuccessfully saved developer details and continue with implementation\n");
+				return "redirect:/developer/developerpage";
+			}
+			model.addAttribute(validUser);
+			return "welcomelogin";
 		}
-		request.getSession().setAttribute("user", validUser);
-		if(validUser.getEmploymentType().toLowerCase().equals("admin"))
-		{
-			System.out.print("Error not reached yet");
-			return "redirect:/admin/adminlogin";
+		catch(Exception e) {
+			return "welcomelogin";
 		}
-		if(validUser.getEmploymentType().toLowerCase().equals("manager"))
-		{
-			System.out.println("\nsuccessfully saved manager details and continue with implementation\n");
-			return "redirect:/manager/managerpage";
-		}
-		if(validUser.getEmploymentType().toLowerCase().equals("developer"))
-		{
-			System.out.println("\nsuccessfully saved developer details and continue with implementation\n");
-			return "redirect:/developer/developerpage";
-		}
-		model.addAttribute(validUser);
-		return "welcomelogin";
 	}
 	
 	@GetMapping("/logout")

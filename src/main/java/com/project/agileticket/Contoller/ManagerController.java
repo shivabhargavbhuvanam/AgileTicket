@@ -33,11 +33,15 @@ public class ManagerController {
 			return "redirect:/user/welcomelogin";
 		}
 		
-		if(!request.isRequestedSessionIdValid())
+		User user = (User) request.getSession().getAttribute("user");
+		if(request.getSession().getAttribute("user") == null)
 		{
-			return "loginfailure";
+			return "redirect:/user/welcomelogin";
 		}
-		User user = (User)request.getSession().getAttribute("user");
+		if(!user.getEmploymentType().toLowerCase().equals("manager"))
+		{
+			return "redirect:/user/logout";
+		}
 		userService.validateUserByCredentials(user.getName().toLowerCase(), user.getPassword(), user.getEmploymentType().toLowerCase());
 		
 		List<Ticket> tickets = new ArrayList<>();

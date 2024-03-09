@@ -26,12 +26,16 @@ public class AdminController {
 		{
 			return "loginfailure";
 		}
+		User user = (User) request.getSession().getAttribute("user");
 		if(request.getSession().getAttribute("user") == null)
 		{
 			return "redirect:/user/welcomelogin";
 		}
+		if(!user.getEmploymentType().toLowerCase().equals("admin"))
+		{
+			return "redirect:/user/logout";
+		}
 		
-		User user = (User)request.getSession().getAttribute("user");
 		userService.validateUserByCredentials(user.getName().toLowerCase(), user.getPassword(), user.getEmploymentType().toLowerCase());
 		
 		System.out.print("adminPage is reached");
